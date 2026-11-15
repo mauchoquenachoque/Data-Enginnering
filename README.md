@@ -1,6 +1,6 @@
 # ByteFlow: End-to-End Modern Data Engineering Platform
 
-[![CI/CD Pipeline](https://github.com/mauchoquenachoque/01-U2-Online-Analitycal-Processing/actions/workflows/deploy.yml/badge.svg)]([https://github.com/your-username/byteflow-data-platform](https://github.com/mauchoquenachoque/01-U2-Online-Analitycal-Processing)/actions/workflows/deploy.yml)
+[![CI/CD Pipeline](https://github.com/mauchoquenachoque/Data-Enginnering/actions/workflows/deploy.yml/badge.svg)]([https://github.com/your-username/byteflow-data-platform](https://github.com/mauchoquenachoque/Data-Enginnering)/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![dbt](https://img.shields.io/badge/dbt-Core-orange.svg)](https://www.getdbt.com/)
 [![Airflow](https://img.shields.io/badge/Orchestration-Apache%20Airflow-017CEE.svg)](https://airflow.apache.org/)
