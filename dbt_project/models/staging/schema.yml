@@ -1,0 +1,44 @@
+version: 2
+
+sources:
+  - name: raw_staging
+    description: "Raw streaming data ingested from Kafka into MotherDuck/DuckDB tables"
+    tables:
+      - name: raw_orders_stream
+        description: "Append-only streaming buffer table of e-commerce transactions"
+        columns:
+          - name: event_id
+            description: "Unique event identifier"
+            tests:
+              - not_null
+          - name: order_id
+            description: "Order business identifier"
+            tests:
+              - not_null
+          - name: total_order_value
+            description: "Gross transaction amount"
+            tests:
+              - not_null
+
+models:
+  - name: stg_ecommerce__orders
+    description: "Deduplicated, standardized, and type-cast e-commerce order transactions"
+    columns:
+      - name: order_id
+        description: "Primary key for clean orders"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Foreign key for the customer"
+        tests:
+          - not_null
+      - name: order_status
+        description: "Transaction status (COMPLETED, PENDING, FAILED, CANCELLED)"
+        tests:
+          - accepted_values:
+              values: ['COMPLETED', 'PENDING', 'FAILED', 'CANCELLED']
+      - name: total_order_value_usd
+        description: "Order monetary total in USD"
+        tests:
+          - not_null

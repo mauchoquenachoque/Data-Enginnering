@@ -1,0 +1,70 @@
+services:
+  # Airflow Webserver on Render PaaS
+  - type: web
+    name: byteflow-airflow-webserver
+    env: docker
+    dockerfilePath: airflow/Dockerfile
+    dockerContext: .
+    plan: starter
+    region: frankfurt
+    buildCommand: ""
+    startCommand: "airflow webserver --port $PORT"
+    healthCheckPath: /health
+    envVars:
+      - key: AIRFLOW__CORE__EXECUTOR
+        value: LocalExecutor
+      - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
+        fromDatabase:
+          name: byteflow-metadata-db
+          property: connectionString
+      - key: AIRFLOW__CORE__FERNET_KEY
+        generateValue: true
+      - key: MOTHERDUCK_TOKEN
+        sync: false
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+
+  # Airflow Scheduler on Render
+  - type: worker
+    name: byteflow-airflow-scheduler
+    env: docker
+    dockerfilePath: airflow/Dockerfile
+    dockerContext: .
+    plan: starter
+    region: frankfurt
+    startCommand: "airflow scheduler"
+    envVars:
+      - key: AIRFLOW__CORE__EXECUTOR
+        value: LocalExecutor
+      - key: AIRFLOW__DATABASE__SQL_ALCHEMY_CONN
+        fromDatabase:
+          name: byteflow-metadata-db
+          property: connectionString
+      - key: MOTHERDUCK_TOKEN
+        sync: false
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+
+  # Continuous Streaming Consumer / Micro-batch Loader
+  - type: worker
+    name: byteflow-kafka-loader
+    env: docker
+    dockerfilePath: airflow/Dockerfile
+    dockerContext: .
+    plan: starter
+    region: frankfurt
+    startCommand: "python -m src.consumers.order_stream_loader"
+    envVars:
+      - key: KAFKA_BOOTSTRAP_SERVERS
+        sync: false
+      - key: KAFKA_SASL_USERNAME
+        sync: false
+      - key: KAFKA_SASL_PASSWORD
+        sync: false
+      - key: MOTHERDUCK_TOKEN
+        sync: false
+
+databases:
+  - name: byteflow-metadata-db
+    plan: starter
+    region: frankfurt

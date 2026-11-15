@@ -1,0 +1,8 @@
+category_id,category_name,target_margin_pct
+1,Electronics,0.22
+2,Computers,0.18
+3,Audio,0.35
+4,Accessories,0.45
+5,Furniture,0.28
+6,Lifestyle,0.50
+7,Travel,0.38
